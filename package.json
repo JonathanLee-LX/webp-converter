@@ -1,5 +1,5 @@
 {
-  "name": "@jonathanlee-lx/webp-converter",
+  "name": "@jonathanleelx/webp-converter",
   "version": "1.0.0",
   "description": "WebP 图片转换器 - 支持 MCP 协议，可通过大模型调用",
   "main": "lib/index.js",

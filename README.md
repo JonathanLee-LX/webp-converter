@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/JonathanLee-LX/webp-converter/actions/workflows/test.yml/badge.svg)](https://github.com/JonathanLee-LX/webp-converter/actions/workflows/test.yml)
 [![Publish to npm](https://github.com/JonathanLee-LX/webp-converter/actions/workflows/publish.yml/badge.svg)](https://github.com/JonathanLee-LX/webp-converter/actions/workflows/publish.yml)
-[![npm version](https://img.shields.io/npm/v/@jonathanlee-lx/webp-converter.svg)](https://www.npmjs.com/package/@jonathanlee-lx/webp-converter)
+[![npm version](https://img.shields.io/npm/v/@jonathanleelx/webp-converter.svg)](https://www.npmjs.com/package/@jonathanleelx/webp-converter)
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
 
 这是一个支持MCP（Model Context Protocol）协议的WebP图片转换工具，可以将大模型通过MCP协议调用图片转换功能。
@@ -20,7 +20,7 @@
 ### 从npm安装
 
 ```bash
-npm install -g @jonathanlee-lx/webp-converter
+npm install -g @jonathanleelx/webp-converter
 ```
 
 ### 从源码安装
@@ -205,7 +205,7 @@ node examples/basic-usage.js
 ### 编程接口使用
 
 ```javascript
-const WebPConverter = require('@jonathanlee-lx/webp-converter');
+const WebPConverter = require('@jonathanleelx/webp-converter');
 
 async function convertImages() {
   const converter = new WebPConverter({ quality: 85 });
