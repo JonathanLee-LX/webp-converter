@@ -40,31 +40,31 @@ npm install
 
 ```bash
 # 转换当前目录下的所有图片
-./bin/converter convert
+webp-converter convert
 
 # 转换指定目录下的所有图片
-./bin/converter convert /path/to/images
+webp-converter convert /path/to/images
 
 # 转换指定目录下的所有图片，设置质量为90
-./bin/converter convert /path/to/images -q 90
+webp-converter convert /path/to/images -q 90
 
 # 转换指定目录下的所有图片，输出到指定目录
-./bin/converter convert /path/to/images -o /path/to/output
+webp-converter convert /path/to/images -o /path/to/output
 
 # 转换单个图片文件
-./bin/converter convert --file /path/to/image.jpg
+webp-converter convert --file /path/to/image.jpg
 
 # 转换单个图片文件，设置质量为95
-./bin/converter convert --file /path/to/image.jpg -q 95
+webp-converter convert --file /path/to/image.jpg -q 95
 
 # 显示帮助信息
-./bin/converter --help
+webp-converter --help
 
 # 显示版本信息
-./bin/converter --version
+webp-converter --version
 
 # 显示转换器信息
-./bin/converter info
+webp-converter info
 ```
 
 ### 2. MCP服务器使用
