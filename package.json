@@ -1,0 +1,49 @@
+{
+  "name": "webp-converter",
+  "version": "1.0.0",
+  "description": "WebP 图片转换器 - 支持 MCP 协议，可通过大模型调用",
+  "main": "lib/index.js",
+  "bin": {
+    "webp-converter": "./bin/converter"
+  },
+  "scripts": {
+    "start": "node bin/converter",
+    "mcp-server": "node lib/mcp-server.js",
+    "test": "npx jest",
+    "test:coverage": "npx jest --coverage",
+    "test:watch": "npx jest --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "prepublishOnly": "npm test && npm run lint"
+  },
+  "keywords": ["webp", "image", "converter", "mcp"],
+  "author": "JonathanLee-LX",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "sharp": "^0.33.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JonathanLee-LX/webp-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JonathanLee-LX/webp-converter/issues"
+  },
+  "homepage": "https://github.com/JonathanLee-LX/webp-converter#readme"
+}

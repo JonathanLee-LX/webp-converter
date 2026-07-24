@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "webp-converter": {
+      "command": "node",
+      "args": [
+        "/path/to/webp-converter/lib/mcp-server.js"
+      ]
+    }
+  }
+}
