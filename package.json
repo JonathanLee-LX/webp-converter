@@ -4,7 +4,7 @@
   "description": "WebP 图片转换器 - 支持 MCP 协议，可通过大模型调用",
   "main": "lib/index.js",
   "bin": {
-    "webp-converter": "./bin/converter"
+    "webp-converter": "bin/converter"
   },
   "scripts": {
     "start": "node bin/converter",
@@ -17,7 +17,12 @@
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "prepublishOnly": "npm test && npm run lint"
   },
-  "keywords": ["webp", "image", "converter", "mcp"],
+  "keywords": [
+    "webp",
+    "image",
+    "converter",
+    "mcp"
+  ],
   "author": "JonathanLee-LX",
   "license": "ISC",
   "dependencies": {
@@ -40,7 +45,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/JonathanLee-LX/webp-converter.git"
+    "url": "git+https://github.com/JonathanLee-LX/webp-converter.git"
   },
   "bugs": {
     "url": "https://github.com/JonathanLee-LX/webp-converter/issues"
