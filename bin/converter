@@ -5,6 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const WebPConverter = require('../lib/index');
 
+const pkg = require('../package.json');
+
 const program = new Command();
 
 function formatBytes(bytes) {
@@ -18,7 +20,7 @@ function formatBytes(bytes) {
 program
   .name('webp-converter')
   .description('WebP 图片转换器 - 支持 MCP 协议，可通过大模型调用')
-  .version('1.0.0')
+  .version(pkg.version)
   .argument('[directory]', '要转换的图片目录或文件', '.')
   .option('-q, --quality <number>', 'WebP 图片质量 (1-100)', '80')
   .option('-o, --output <directory>', '输出目录')
@@ -31,7 +33,7 @@ program
       const inputPath = path.resolve(directory);
 
       console.log('');
-      console.log('  WebP Converter v1.1.0');
+      console.log(`  WebP Converter v${pkg.version}`);
       console.log('  ====================');
       console.log(`  质量参数: ${options.quality}`);
       console.log('');

@@ -3,21 +3,21 @@ const path = require('path');
 const fs = require('fs');
 
 describe('WebPConverter', () => {
-  const testDir = path.join(__dirname, 'test-images');
-  const outputDir = path.join(__dirname, 'test-output');
+  const testDir = path.join(__dirname, 'conv-test-images');
+  const outputDir = path.join(__dirname, 'conv-test-output');
 
-  beforeAll(() => {
-    // 创建测试目录
-    if (!fs.existsSync(testDir)) {
-      fs.mkdirSync(testDir, { recursive: true });
+  beforeEach(() => {
+    if (fs.existsSync(testDir)) {
+      fs.rmSync(testDir, { recursive: true, force: true });
     }
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    if (fs.existsSync(outputDir)) {
+      fs.rmSync(outputDir, { recursive: true, force: true });
     }
+    fs.mkdirSync(testDir, { recursive: true });
+    fs.mkdirSync(outputDir, { recursive: true });
   });
 
   afterAll(() => {
-    // 清理测试文件
     if (fs.existsSync(testDir)) {
       fs.rmSync(testDir, { recursive: true, force: true });
     }
@@ -46,10 +46,9 @@ describe('WebPConverter', () => {
   });
 
   test('should convert single image', async () => {
-    // 创建一个简单的测试图片
     const sharp = require('sharp');
     const testImage = path.join(testDir, 'test.jpg');
-    
+
     await sharp({
       create: {
         width: 100,
@@ -66,15 +65,15 @@ describe('WebPConverter', () => {
     expect(result.input).toBe(testImage);
     expect(result.output).toContain('.webp');
     expect(result.quality).toBe(80);
-
-    // 验证输出文件存在
+    expect(result.originalSize).toBeGreaterThan(0);
+    expect(result.convertedSize).toBeGreaterThan(0);
+    expect(result.savedPercent).toBeDefined();
     expect(fs.existsSync(result.output)).toBe(true);
   });
 
   test('should convert directory', async () => {
-    // 创建多个测试图片
     const sharp = require('sharp');
-    
+
     for (let i = 0; i < 3; i++) {
       await sharp({
         create: {
