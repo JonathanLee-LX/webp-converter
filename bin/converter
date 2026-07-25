@@ -2,104 +2,100 @@
 
 const { Command } = require('commander');
 const path = require('path');
+const fs = require('fs');
 const WebPConverter = require('../lib/index');
 
 const program = new Command();
 
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
 program
   .name('webp-converter')
   .description('WebP 图片转换器 - 支持 MCP 协议，可通过大模型调用')
-  .version('1.0.0');
-
-program
-  .command('convert')
-  .description('转换图片为 WebP 格式')
-  .argument('[directory]', '要转换的图片目录', '.')
+  .version('1.0.0')
+  .argument('[directory]', '要转换的图片目录或文件', '.')
   .option('-q, --quality <number>', 'WebP 图片质量 (1-100)', '80')
   .option('-o, --output <directory>', '输出目录')
-  .option('-f, --file <path>', '转换单个图片文件')
   .action(async (directory, options) => {
     try {
       const converter = new WebPConverter({
         quality: parseInt(options.quality)
       });
 
-      console.log('WebP Converter v1.0.0');
-      console.log('====================');
+      const inputPath = path.resolve(directory);
 
-      if (options.file) {
-        const filePath = path.resolve(options.file);
-        console.log(`转换单个文件: ${filePath}`);
-        
-        const result = await converter.convertSingleImage(filePath, options.output);
-        
+      console.log('');
+      console.log('  WebP Converter v1.0.0');
+      console.log('  ====================');
+      console.log(`  质量参数: ${options.quality}`);
+      console.log('');
+
+      if (fs.existsSync(inputPath) && fs.statSync(inputPath).isFile()) {
+        const result = await converter.convertSingleImage(inputPath, options.output);
+
         if (result.success) {
-          console.log(`✓ 转换成功: ${result.output}`);
+          console.log(`  ✓ ${path.basename(result.input)} (${result.format} ${result.width}x${result.height})`);
+          console.log(`    原始尺寸: ${formatBytes(result.originalSize)}`);
+          console.log(`    转换尺寸: ${formatBytes(result.convertedSize)}`);
+          const sign = result.savedPercent >= 0 ? '↓' : '↑';
+          const pct = Math.abs(result.savedPercent);
+          console.log(`    优化比例: ${sign} ${pct}% (${formatBytes(Math.abs(result.savedBytes))})`);
+          console.log(`    输出路径: ${result.output}`);
         } else {
-          console.error(`✗ 转换失败: ${result.error}`);
+          console.error(`  ✗ ${result.input}: ${result.error}`);
           process.exit(1);
         }
       } else {
-        const inputDir = path.resolve(directory);
         const outputDir = options.output ? path.resolve(options.output) : null;
-        
-        console.log(`转换目录: ${inputDir}`);
+
+        console.log(`  输入目录: ${inputPath}`);
         if (outputDir) {
-          console.log(`输出目录: ${outputDir}`);
+          console.log(`  输出目录: ${outputDir}`);
         }
-        console.log(`质量: ${options.quality}`);
         console.log('');
 
-        const results = await converter.convertDirectory(inputDir, outputDir);
-        
+        const results = await converter.convertDirectory(inputPath, outputDir);
+
         let successCount = 0;
         let failCount = 0;
-        
+        let totalOriginal = 0;
+        let totalConverted = 0;
+
         results.forEach(result => {
           if (result.success) {
-            console.log(`✓ ${result.input} → ${result.output}`);
             successCount++;
+            totalOriginal += result.originalSize;
+            totalConverted += result.convertedSize;
+            const sign = result.savedPercent >= 0 ? '↓' : '↑';
+            const pct = Math.abs(result.savedPercent).toFixed(2);
+            console.log(`  ✓ ${path.basename(result.input)} (${result.format} ${result.width}x${result.height}) ${formatBytes(result.originalSize)} → ${formatBytes(result.convertedSize)} ${sign} ${pct}%`);
           } else {
-            console.error(`✗ ${result.input}: ${result.error}`);
             failCount++;
+            console.error(`  ✗ ${path.basename(result.input)}: ${result.error}`);
           }
         });
 
         console.log('');
-        console.log('转换完成!');
-        console.log(`成功: ${successCount}, 失败: ${failCount}`);
+        console.log('  ────────────────────────────────');
+        console.log(`  转换完成: ${successCount} 成功, ${failCount} 失败`);
+        if (successCount > 0) {
+          const totalSaved = totalOriginal - totalConverted;
+          const totalPct = totalOriginal > 0 ? (totalSaved / totalOriginal * 100).toFixed(2) : '0.00';
+          const sign = totalSaved >= 0 ? '↓' : '↑';
+          console.log(`  总计: ${formatBytes(totalOriginal)} → ${formatBytes(totalConverted)} ${sign} ${Math.abs(totalPct)}% (${formatBytes(Math.abs(totalSaved))})`);
+        }
       }
+      console.log('');
     } catch (error) {
       console.error('错误:', error.message);
       process.exit(1);
     }
-  });
-
-program
-  .command('info')
-  .description('显示转换器信息')
-  .action(() => {
-    console.log('WebP Converter v1.0.0');
-    console.log('====================');
-    console.log('功能特性:');
-    console.log('  - 批量转换目录中的所有图片 (jpg, jpeg, png → webp)');
-    console.log('  - 支持单个图片文件转换');
-    console.log('  - 支持自定义质量参数 (1-100)');
-    console.log('  - 并行处理，提高转换效率');
-    console.log('  - 通过 MCP 协议供大模型调用');
-    console.log('');
-    console.log('使用方法:');
-    console.log('  webp-converter convert [目录] [选项]');
-    console.log('  webp-converter convert --file [文件路径] [选项]');
-    console.log('');
-    console.log('示例:');
-    console.log('  webp-converter convert ./images');
-    console.log('  webp-converter convert ./images -q 90 -o ./output');
-    console.log('  webp-converter convert --file ./image.jpg');
-    console.log('');
-    console.log('MCP 服务器:');
-    console.log('  启动: pnpm run mcp-server');
-    console.log('  配置: 参见 MCP_SETUP.md');
   });
 
 program.parse();

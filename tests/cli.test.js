@@ -8,7 +8,6 @@ describe('CLI', () => {
   const outputDir = path.join(__dirname, 'test-output');
 
   beforeAll(() => {
-    // 创建测试目录
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
     }
@@ -18,7 +17,6 @@ describe('CLI', () => {
   });
 
   afterAll(() => {
-    // 清理测试文件
     if (fs.existsSync(testDir)) {
       fs.rmSync(testDir, { recursive: true, force: true });
     }
@@ -30,8 +28,8 @@ describe('CLI', () => {
   test('should show help', () => {
     const output = execSync(`node ${converterPath} --help`, { encoding: 'utf8' });
     expect(output).toContain('WebP 图片转换器');
-    expect(output).toContain('convert');
-    expect(output).toContain('info');
+    expect(output).toContain('--quality');
+    expect(output).toContain('--output');
   });
 
   test('should show version', () => {
@@ -39,55 +37,14 @@ describe('CLI', () => {
     expect(output).toMatch(/\d+\.\d+\.\d+/);
   });
 
-  test('should show info', () => {
-    const output = execSync(`node ${converterPath} info`, { encoding: 'utf8' });
-    expect(output).toContain('WebP Converter');
-    expect(output).toContain('功能特性');
-    expect(output).toContain('使用方法');
-  });
-
-  test('should show convert help', () => {
-    const output = execSync(`node ${converterPath} convert --help`, { encoding: 'utf8' });
-    expect(output).toContain('转换图片为 WebP 格式');
-    expect(output).toContain('--quality');
-    expect(output).toContain('--output');
-    expect(output).toContain('--file');
-  });
-
-  test('should convert directory', async () => {
-    // 确保目录存在
-    if (!fs.existsSync(testDir)) {
-      fs.mkdirSync(testDir, { recursive: true });
-    }
-    
-    // 创建测试图片
-    const sharp = require('sharp');
-    const testImage = path.join(testDir, 'cli-test.jpg');
-    
-    await sharp({
-      create: {
-        width: 100,
-        height: 100,
-        channels: 3,
-        background: { r: 255, g: 0, b: 0 }
-      }
-    }).jpeg().toFile(testImage);
-
-    const output = execSync(`node ${converterPath} convert ${testDir}`, { encoding: 'utf8' });
-    expect(output).toContain('转换完成');
-    expect(output).toContain('成功');
-  });
-
   test('should convert single file', async () => {
-    // 确保目录存在
     if (!fs.existsSync(testDir)) {
       fs.mkdirSync(testDir, { recursive: true });
     }
-    
-    // 创建测试图片
+
     const sharp = require('sharp');
     const testImage = path.join(testDir, 'cli-single-test.jpg');
-    
+
     await sharp({
       create: {
         width: 100,
@@ -97,7 +54,31 @@ describe('CLI', () => {
       }
     }).jpeg().toFile(testImage);
 
-    const output = execSync(`node ${converterPath} convert --file ${testImage}`, { encoding: 'utf8' });
-    expect(output).toContain('转换成功');
+    const output = execSync(`node ${converterPath} ${testImage}`, { encoding: 'utf8' });
+    expect(output).toContain('原始尺寸');
+    expect(output).toContain('转换尺寸');
+    expect(output).toContain('优化比例');
+  });
+
+  test('should convert directory', async () => {
+    if (!fs.existsSync(testDir)) {
+      fs.mkdirSync(testDir, { recursive: true });
+    }
+
+    const sharp = require('sharp');
+    const testImage = path.join(testDir, 'cli-test.jpg');
+
+    await sharp({
+      create: {
+        width: 100,
+        height: 100,
+        channels: 3,
+        background: { r: 255, g: 0, b: 0 }
+      }
+    }).jpeg().toFile(testImage);
+
+    const output = execSync(`node ${converterPath} ${testDir}`, { encoding: 'utf8' });
+    expect(output).toContain('转换完成');
+    expect(output).toContain('总计');
   });
 });

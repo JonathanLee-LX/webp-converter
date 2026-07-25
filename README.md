@@ -40,31 +40,45 @@ npm install
 
 ```bash
 # 转换当前目录下的所有图片
-webp-converter convert
+webp-converter
 
 # 转换指定目录下的所有图片
-webp-converter convert /path/to/images
+webp-converter /path/to/images
 
 # 转换指定目录下的所有图片，设置质量为90
-webp-converter convert /path/to/images -q 90
+webp-converter /path/to/images -q 90
 
 # 转换指定目录下的所有图片，输出到指定目录
-webp-converter convert /path/to/images -o /path/to/output
+webp-converter /path/to/images -o /path/to/output
 
 # 转换单个图片文件
-webp-converter convert --file /path/to/image.jpg
+webp-converter /path/to/image.jpg
 
 # 转换单个图片文件，设置质量为95
-webp-converter convert --file /path/to/image.jpg -q 95
+webp-converter /path/to/image.jpg -q 95
 
 # 显示帮助信息
 webp-converter --help
 
 # 显示版本信息
 webp-converter --version
+```
 
-# 显示转换器信息
-webp-converter info
+**输出示例：**
+
+```
+  WebP Converter v1.0.0
+  ====================
+  质量参数: 80
+
+  输入目录: /path/to/images
+
+  ✓ photo1.jpg (jpeg 800x600) 3.04 KB -> 946 B ↓ 69.66%
+  ✓ photo2.png (png 1024x768) 4.23 KB -> 1.45 KB ↓ 65.75%
+
+  ────────────────────────────────
+  转换完成: 2 成功, 0 失败
+  总计: 7.28 KB -> 2.37 KB ↓ 67.39% (4.9 KB)
 ```
 
 ### 2. MCP服务器使用
