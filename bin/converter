@@ -31,7 +31,7 @@ program
       const inputPath = path.resolve(directory);
 
       console.log('');
-      console.log('  WebP Converter v1.0.0');
+      console.log('  WebP Converter v1.1.0');
       console.log('  ====================');
       console.log(`  质量参数: ${options.quality}`);
       console.log('');
