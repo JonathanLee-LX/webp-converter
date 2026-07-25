@@ -7,13 +7,15 @@ describe('CLI', () => {
   const testDir = path.join(__dirname, 'test-images');
   const outputDir = path.join(__dirname, 'test-output');
 
-  beforeAll(() => {
-    if (!fs.existsSync(testDir)) {
-      fs.mkdirSync(testDir, { recursive: true });
+  beforeEach(() => {
+    if (fs.existsSync(testDir)) {
+      fs.rmSync(testDir, { recursive: true, force: true });
     }
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    if (fs.existsSync(outputDir)) {
+      fs.rmSync(outputDir, { recursive: true, force: true });
     }
+    fs.mkdirSync(testDir, { recursive: true });
+    fs.mkdirSync(outputDir, { recursive: true });
   });
 
   afterAll(() => {
@@ -38,10 +40,6 @@ describe('CLI', () => {
   });
 
   test('should convert single file', async () => {
-    if (!fs.existsSync(testDir)) {
-      fs.mkdirSync(testDir, { recursive: true });
-    }
-
     const sharp = require('sharp');
     const testImage = path.join(testDir, 'cli-single-test.jpg');
 
@@ -61,10 +59,6 @@ describe('CLI', () => {
   });
 
   test('should convert directory', async () => {
-    if (!fs.existsSync(testDir)) {
-      fs.mkdirSync(testDir, { recursive: true });
-    }
-
     const sharp = require('sharp');
     const testImage = path.join(testDir, 'cli-test.jpg');
 
