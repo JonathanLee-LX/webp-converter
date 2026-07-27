@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "webp-converter-service",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "images": {
+    "binding": "IMAGES"
+  },
+  "r2_buckets": [
+    {
+      "binding": "R2_BUCKET",
+      "bucket_name": "webp-converter"
+    }
+  ],
+  "vars": {
+    "PUBLIC_BASE_URL": "https://webp-converter-service.jonathanleelx.workers.dev"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "MCP_SERVER",
+        "class_name": "WebPConverterMCP"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["WebPConverterMCP"]
+    }
+  ]
+}
